@@ -1,0 +1,210 @@
+{
+  "main": {
+    "id": "5324373015726ba8",
+    "type": "split",
+    "children": [
+      {
+        "id": "4509724f8bf84da7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e7a7b303c61786dc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d8aef92576078d30",
+    "type": "split",
+    "children": [
+      {
+        "id": "249f339b95845024",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "685f6daeaf00ee4b",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "cc51efb7797575c8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "49f98f1138888f7d",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "62018eb669cd5f46",
+    "type": "split",
+    "children": [
+      {
+        "id": "94cecdd2dcbf6fed",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7e5481efb1ad1cd5",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "439c9b7a8348fcdb",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "a4dc04eb394f8006",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "c862b24925a7c244",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "crash-zine:Sample Plugin": false,
+      "homepage:Open homepage": false
+    }
+  },
+  "active": "e7a7b303c61786dc",
+  "lastOpenFiles": [
+    "README.md",
+    "CrashRiso.md",
+    "Paper Sizes Reference.md",
+    "An 8 Page Zine Outline.md",
+    "A 16 page Zine Outline.md",
+    "sources/risolana-printing-with-riso.md",
+    "sources/SF5130.md",
+    "zines/test-zine/test-zine-fun-fact.md",
+    "zines/test-zine/test-zine-cover.md",
+    "templates/zine-page.md",
+    "templates/zine-index.md",
+    "templates/zine-cover.md",
+    "templates/zine-back-cover.md",
+    "zines/test-zine/test-zine-back-cover.md",
+    "zines/test-zine/test-zine-index.md",
+    "media/crashspace-logo.png",
+    "media",
+    "paper-sizes.md",
+    "2025-05-24.md",
+    "sources/Welcome  CRASH Space.md",
+    "zines/test-zine/test-zine-misconception.md",
+    "zines/test-zine/test-zine-why-love-it.md",
+    "zines/test-zine/test-zine-what-is-it.md",
+    "zines/test-zine/test-zine-what-else.md",
+    "zines/test-zine",
+    "zines",
+    "obsidian-clipper-json-files/default-clipper.json",
+    "obsidian-clipper-json-files/youtube-with-transcript-clipper.json",
+    "obsidian-clipper-json-files/wikipedia-clipper.json",
+    "obsidian-clipper-json-files",
+    "untitled folder",
+    "Zines/test-zine/test-zine-back-cover.md",
+    "Zines/test-zine/test-zine-what-else.md",
+    "Zines/test-zine/test-zine-misconception.md",
+    "Zines/test-zine/test-zine-index.md",
+    "Zines/test-zine",
+    "Zines/Weekly Newspaper Nostalgia"
+  ]
+}

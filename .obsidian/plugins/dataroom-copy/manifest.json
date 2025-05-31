@@ -1,0 +1,11 @@
+{
+    "changed": 0,
+    "id": "dataroom-copy-paste",
+    "name": "Dataroom Copy-Paste",
+    "version": "1.0.0",
+    "minAppVersion": "0.15.0",
+    "description": "Copy and paste code blocks or selected text with YAML front matter.",
+    "author": "LNSY",
+    "authorUrl": "https://lnsy.dev",
+    "isDesktopOnly": false
+}

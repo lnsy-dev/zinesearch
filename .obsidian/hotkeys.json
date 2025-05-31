@@ -1,0 +1,20 @@
+{
+  "dataroom-copy-paste:copy-selection-or-code-block": [
+    {
+      "modifiers": [
+        "Ctrl",
+        "Shift"
+      ],
+      "key": "C"
+    }
+  ],
+  "dataroom-copy-paste:paste-memory": [
+    {
+      "modifiers": [
+        "Ctrl",
+        "Shift"
+      ],
+      "key": "V"
+    }
+  ]
+}
