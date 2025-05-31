@@ -14,6 +14,7 @@ import matter from 'gray-matter';
  */
 interface CopyCodeBlockPluginSettings {
     citationStyle: string;
+    memoryCopy: string | null;
 }
 
 /**
@@ -21,6 +22,7 @@ interface CopyCodeBlockPluginSettings {
  */
 const DEFAULT_SETTINGS: CopyCodeBlockPluginSettings = {
     citationStyle: 'APA',
+    memoryCopy: null,
 };
 
 /**
@@ -31,7 +33,15 @@ export default class CopyCodeBlockPlugin extends Plugin {
     settings: CopyCodeBlockPluginSettings;
 
     // To store copied selection or code block with front matter and source note in memory
-    private memoryCopy: string | null = null;
+    // Note: This is now persisted in settings for data persistence across sessions
+    private get memoryCopy(): string | null {
+        return this.settings.memoryCopy;
+    }
+
+    private set memoryCopy(value: string | null) {
+        this.settings.memoryCopy = value;
+        this.saveSettings();
+    }
 
     /**
      * Triggered when the plugin is loaded by Obsidian.
@@ -68,7 +78,7 @@ export default class CopyCodeBlockPlugin extends Plugin {
      */
     copySelectionOrCodeBlock(editor: Editor, view: MarkdownView): void {
         const selection = editor.getSelection();
-        const noteName = view.file.basename;
+        const noteName = view.file?.basename || 'Unknown';
         if (selection.length > 0) {
             this.copySelectionToMemory(editor, selection, noteName);
         } else {
@@ -84,10 +94,27 @@ export default class CopyCodeBlockPlugin extends Plugin {
      */
     private copySelectionToMemory(editor: Editor, selection: string, noteName: string): void {
         const content = editor.getValue();
-        const { data } = matter(content);
+        let frontMatter = {};
+        
+        try {
+            const parsed = matter(content);
+            frontMatter = parsed.data;
+        } catch (error) {
+            console.error('YAML parsing error:', error);
+            new Notice('Warning: YAML front matter has errors. Using note name for citation.');
+            // Use the note name as a fallback for basic citation info
+            frontMatter = {
+                title: noteName,
+                author: 'Unknown',
+                year: new Date().getFullYear(),
+                publisher: 'Unknown',
+                url: 'Unknown'
+            };
+        }
+        
         this.memoryCopy = JSON.stringify({
             selection: selection,
-            frontMatter: data,
+            frontMatter: frontMatter,
             noteName: noteName
         });
         new Notice('Selected text and YAML front matter stored in memory.');
@@ -125,10 +152,27 @@ export default class CopyCodeBlockPlugin extends Plugin {
 
             // Store code block content with YAML front matter and source note name in memory
             const content = editor.getValue();
-            const { data } = matter(content);
+            let frontMatter = {};
+            
+            try {
+                const parsed = matter(content);
+                frontMatter = parsed.data;
+            } catch (error) {
+                console.error('YAML parsing error:', error);
+                new Notice('Warning: YAML front matter has errors. Using note name for citation.');
+                // Use the note name as a fallback for basic citation info
+                frontMatter = {
+                    title: noteName,
+                    author: 'Unknown',
+                    year: new Date().getFullYear(),
+                    publisher: 'Unknown',
+                    url: 'Unknown'
+                };
+            }
+            
             this.memoryCopy = JSON.stringify({
                 codeBlock: codeBlockContent.trim(),
-                frontMatter: data,
+                frontMatter: frontMatter,
                 noteName: noteName
             });
 
@@ -159,9 +203,19 @@ export default class CopyCodeBlockPlugin extends Plugin {
      */
     private parseAuthors(frontMatter: any): string {
         if (frontMatter.author) {
-            return frontMatter.author;
+            // Handle if author is an array
+            if (Array.isArray(frontMatter.author)) {
+                return frontMatter.author.map((author: string) => 
+                    // Remove wiki link brackets if present
+                    author.replace(/\[\[|\]\]/g, '')
+                ).join(', ');
+            }
+            // Handle if author is a string
+            return frontMatter.author.replace(/\[\[|\]\]/g, '');
         } else if (frontMatter.authors && Array.isArray(frontMatter.authors)) {
-            return frontMatter.authors.join(', ');
+            return frontMatter.authors.map((author: string) => 
+                author.replace(/\[\[|\]\]/g, '')
+            ).join(', ');
         }
         return '_author is missing_';
     }
@@ -174,26 +228,34 @@ export default class CopyCodeBlockPlugin extends Plugin {
     private generateAPACitation(frontMatter: any): string {
         const author = this.parseAuthors(frontMatter);
         const title = frontMatter.title || '[title is missing]';
-        const year = frontMatter.year || frontMatter.published_year || 'n.d.';
+        // Look for various date fields
+        const year = frontMatter.year || 
+                    frontMatter.published_year || 
+                    frontMatter.published || 
+                    frontMatter.date || 
+                    'n.d.';
+        // Extract just the year if it's a full date
+        const yearOnly = typeof year === 'string' ? year.split('-')[0] : year;
+        
         const publisher = frontMatter.publisher || '[publisher is missing]';
         const url = frontMatter.url || frontMatter.original_url || '[url is missing]';
 
         const type = (frontMatter.type || 'WEBSITE').toUpperCase();
         switch (type) {
             case 'BOOK':
-                return `${author} (${year}). *${title}*. ${publisher}.`;
+                return `${author} (${yearOnly}). *${title}*. ${publisher}.`;
             case 'JOURNAL-ARTICLE':
-                return `${author} (${year}). ${title}. *Journal Title*, Volume(Issue), pages. DOI or URL`;
+                return `${author} (${yearOnly}). ${title}. *Journal Title*, Volume(Issue), pages. DOI or URL`;
             case 'VIDEO':
             case 'YOUTUBEVIDEO':
             case 'YOUTUBE-VIDEO':
-                return `${author} (${year}). *${title}* [Video]. ${publisher}. ${url}`;
+                return `${author} (${yearOnly}). *${title}* [Video]. ${publisher}. ${url}`;
 
             case 'WIKIPEDIA-ARTICLE':
             case 'WIKIPEDIA':
             case 'wikipedia':
             case 'wikipedia-article':
-                return `${title} (${year}, Month Day). In _Wikipedia_. ${url}`;
+                return `${title} (${yearOnly}, Month Day). In _Wikipedia_. ${url}`;
             case 'WEBPAGE':
             case 'WEBSITE':
             case 'SITE':
@@ -202,11 +264,11 @@ export default class CopyCodeBlockPlugin extends Plugin {
             case 'NEWSPAPER-ARTICLE':
             case 'newspaper-article':
             case 'article':
-                return `${author} (${year}). ${title}. ${publisher}. ${url}`;
+                return `${author} (${yearOnly}). ${title}. ${publisher}. ${url}`;
             case 'LLM-SESSION':
-                return `${author} (${year}). *${title}* [Large language model]. ${url}`;
+                return `${author} (${yearOnly}). *${title}* [Large language model]. ${url}`;
             default:
-                return `${author} (${year}). *${title}*. ${publisher}. ${url}`;
+                return `${author} (${yearOnly}). *${title}*. ${publisher}. ${url}`;
         }
     }
 
@@ -291,7 +353,7 @@ export default class CopyCodeBlockPlugin extends Plugin {
             // Format text as markdown quote for each line
             const quotedContent = (copyObj.selection || copyObj.codeBlock)
                 .split('\n')
-                .map(line => `> ${line}`)
+                .map((line: string) => `> ${line}`)
                 .join('\n');
 
             // Create footnote text with a line break before the wiki link
